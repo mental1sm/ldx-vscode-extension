@@ -1,0 +1,39 @@
+{
+  "name": "ldx",
+  "displayName": "ldx",
+  "description": "LDX - Lua Derma XML, extension that allows to create UI in GMod vgui and derma in declarative style",
+  "version": "0.0.1",
+  "main": "./extension.js",
+  "engines": {
+    "vscode": "^1.98.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "ldx",
+      "aliases": ["LDX", "ldx"],
+      "extensions": [".ldx"],
+      "configuration": "./language-configuration.json"
+    }],
+    "configuration": {
+      "title": "LDX Extension",
+      "properties": {
+          "ldx.enableLuaCompletion": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable Lua autocompletion within LDX files. Disabling this prevents temporary Lua documents from appearing."
+          }
+        }
+    },
+    "grammars": [{
+      "language": "ldx",
+      "scopeName": "source.ldx",
+      "path": "./syntaxes/ldx.tmLanguage.json",
+      "embeddedLanguages": {
+        "source.lua": "lua"
+    }
+    }]
+  }
+}

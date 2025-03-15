@@ -1,0 +1,26 @@
+{
+    "Lua.workspace.library": [
+        "G:\\SteamLibrary\\steamapps\\common\\GarrysMod\\garrysmod\\lua",
+        "C:\\Users\\gnida\\Documents\\lua_L",
+    ],
+    "Lua.diagnostics.globals": [
+        "GM", "ENT", "SWEP", "PLAYER"
+    ],
+    "Lua.diagnostics.enable": true,
+        "Lua.diagnostics.disable": [
+	    "undefined-global"
+    ],
+    "Lua.runtime.special": {
+	    "include": "require",
+	    "IncludeCS": "require"
+    },
+    "Lua.runtime.nonstandardSymbol": [
+	    "continue",
+	    "&&",
+	    "||",
+	    "!=",
+	    "!",
+	    "//"
+    ],
+    "Lua.runtime.version": "Lua 5.1"
+}

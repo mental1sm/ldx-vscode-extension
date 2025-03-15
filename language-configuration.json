@@ -1,0 +1,36 @@
+{
+    "comments": {
+        "lineComment": "--"
+    },
+    "brackets": [
+        ["<", ">"],
+        ["{", "}"]
+    ],
+    "autoClosingPairs": [
+        { "open": "<", "close": ">", "notIn": ["string", "comment"] },
+        { "open": "{", "close": "}", "notIn": ["string", "comment"] },
+        { "open": "\"", "close": "\"", "notIn": ["string", "comment"] }
+    ],
+    "surroundingPairs": [
+        ["<", ">"],
+        ["{", "}"],
+        ["\"", "\""]
+    ],
+    "autoCloseBefore": " \n\t\r>",
+    "onEnterRules": [
+        {
+            "beforeText": "^\\s*<[A-Za-z]+[^>]*[^/]>$",
+            "afterText": "^\\s*</[A-Za-z]+>$",
+            "action": {
+                "indent": "indent",
+                "appendText": "\n\t"
+            }
+        }
+    ],
+    "embeddedLanguages": [
+        {
+            "label": "lua",
+            "pattern": "{[^}]*}"
+        }
+    ]
+}

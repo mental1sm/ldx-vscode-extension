@@ -1,0 +1,160 @@
+{
+    "name": "LDX",
+    "scopeName": "source.ldx",
+    "fileTypes": [".ldx"],
+    "patterns": [
+        {
+            "include": "#components"
+        },
+        {
+            "include": "#lua-outside"
+        }
+    ],
+    "repository": {
+        "components": {
+            "patterns": [
+                {
+                    "name": "meta.component.ldx",
+                    "begin": "Component\\s+([A-Za-z][A-Za-z0-9]*)\\s*=\\s*\\{",
+                    "beginCaptures": {
+                        "0": { "name": "keyword.other.component.ldx" },
+                        "1": { "name": "entity.name.type.component.ldx" }
+                    },
+                    "end": "\\}",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.block.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#tags"
+                        },
+                        {
+                            "include": "#lua-outside"
+                        },
+						{
+							"include": "#inject"
+						}
+                    ]
+                }
+            ]
+        },
+        "tags": {
+            "patterns": [
+                {
+                    "name": "meta.tag.ldx",
+                    "begin": "(<)([A-Za-z]+)\\b",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.definition.tag.begin.ldx" },
+                        "2": { "name": "entity.name.tag.ldx" }
+                    },
+                    "end": "(/>|>)",
+                    "endCaptures": {
+                        "1": { "name": "punctuation.definition.tag.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#attributes"
+                        }
+                    ]
+                },
+                {
+                    "name": "meta.tag.close.ldx",
+                    "match": "(</)([A-Za-z]+)(>)",
+                    "captures": {
+                        "1": { "name": "punctuation.definition.tag.begin.ldx" },
+                        "2": { "name": "entity.name.tag.ldx" },
+                        "3": { "name": "punctuation.definition.tag.end.ldx" }
+                    }
+                }
+            ]
+        },
+        "attributes": {
+            "patterns": [
+                {
+                    "name": "meta.attribute.ldx",
+                    "begin": "\\s+([a-zA-Z]+)\\s*=\\s*",
+                    "beginCaptures": {
+                        "1": { "name": "entity.other.attribute-name.ldx" }
+                    },
+                    "end": "(?=[\\s/>])",
+                    "patterns": [
+                        {
+                            "name": "string.quoted.double.ldx",
+                            "match": "\"([^\"]*)\"",
+                            "captures": {
+                                "1": { "name": "string.content.ldx" }
+                            }
+                        },
+                        {
+                            "name": "source.lua",
+                            "begin": "{",
+                            "end": "}",
+                            "beginCaptures": {
+                                "0": { "name": "punctuation.section.embedded.begin.ldx" }
+                            },
+                            "endCaptures": {
+                                "0": { "name": "punctuation.section.embedded.end.ldx" }
+                            },
+                            "patterns": [
+                                {
+                                    "include": "source.lua"
+                                },
+                                {
+                                    "include": "#parent-reference"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "parent-reference": {
+            "patterns": [
+                {
+                    "name": "variable.other.parent.ldx",
+                    "match": "\\$PARENT"
+                }
+            ]
+        },
+		"input-args-reference": {
+			"patterns": [
+				{
+					"name": "variable.other.inputargs.ldx",
+					"match": "\\$ARGS"
+				}
+			]
+		},
+        "lua-outside": {
+            "patterns": [
+                {
+                    "name": "source.lua",
+                    "begin": "{",
+                    "end": "}",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.section.embedded.begin.lua" }
+                    },
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.embedded.end.lua" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "source.lua"
+                        }
+                    ]
+                }
+            ]
+        },
+		"inject": {
+			"patterns": [
+				{
+					"name": "meta.function-call.inject.ldx",
+					"match": "INJECT\\s*\\(([^)]+)\\)",
+					"captures": {
+						"0": { "name": "keyword.other.inject.ldx" },
+						"1": { "name": "variable.parameter.inject.ldx" }
+					}
+				}
+			]
+		}
+    }
+}
