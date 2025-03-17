@@ -4,17 +4,21 @@ const path = require('path');
 
 function getInheritedAttributes(tag, mappings) {
     const result = new Set();
-    let currentTag = tag;
-    while (currentTag && mappings.inheritance[currentTag]) {
+    
+    function collectDermaAttributes(currentTag) {
+        if (!currentTag || !mappings.inheritance[currentTag]) return;
+
         if (mappings.dermaMappings[currentTag]) {
             mappings.dermaMappings[currentTag].forEach(attr => result.add(attr));
         }
+
         const parents = mappings.inheritance[currentTag];
-        currentTag = parents && parents.length > 0 ? parents[0] : null;
+        if (parents) {
+            parents.forEach(parent => collectDermaAttributes(parent));
+        }
     }
-    if (mappings.dermaMappings[tag]) {
-        mappings.dermaMappings[tag].forEach(attr => result.add(attr));
-    }
+    
+    collectDermaAttributes(tag);
     return Array.from(result);
 }
 
