@@ -1,0 +1,11 @@
+{
+    "iconDefinitions": {
+      "ldx-icon": {
+        "iconPath": "./ldx-icon.png"
+      }
+    },
+    "fileExtensions": {
+      "ldx": "ldx-icon"
+    }
+  }
+  

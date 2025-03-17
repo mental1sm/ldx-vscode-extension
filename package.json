@@ -17,12 +17,19 @@
       "extensions": [".ldx"],
       "configuration": "./language-configuration.json"
     }],
+    "iconThemes": [
+      {
+        "id": "idx-icons",
+        "label": "LDX Icons",
+        "path": "./icons/ldx-icon-theme.json"
+      }
+    ],
     "configuration": {
       "title": "LDX Extension",
       "properties": {
           "ldx.enableLuaCompletion": {
               "type": "boolean",
-              "default": false,
+              "default": true,
               "description": "Enable Lua autocompletion within LDX files. Disabling this prevents temporary Lua documents from appearing."
           }
         }

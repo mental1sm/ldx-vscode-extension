@@ -29,11 +29,17 @@
                             "include": "#tags"
                         },
                         {
-                            "include": "#lua-outside"
+                            "include": "#lua-inline"
                         },
-						{
-							"include": "#inject"
-						}
+                        {
+                            "include": "#inject"
+                        },
+                        {
+                            "include": "#if-block"
+                        },
+                        {
+                            "include": "#map-block"
+                        }
                     ]
                 }
             ]
@@ -97,7 +103,7 @@
                             },
                             "patterns": [
                                 {
-                                    "include": "source.lua"
+                                    "include": "#lua-nested"
                                 },
                                 {
                                     "include": "#parent-reference"
@@ -105,6 +111,13 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "name": "meta.attribute.procedure.ldx",
+                    "match": "\\s+([a-zA-Z]+)(?=[\\s/>])",
+                    "captures": {
+                        "1": { "name": "entity.other.attribute-name.procedure.ldx" }
+                    }
                 }
             ]
         },
@@ -116,14 +129,14 @@
                 }
             ]
         },
-		"input-args-reference": {
-			"patterns": [
-				{
-					"name": "variable.other.inputargs.ldx",
-					"match": "\\$ARGS"
-				}
-			]
-		},
+        "input-args-reference": {
+            "patterns": [
+                {
+                    "name": "variable.other.inputargs.ldx",
+                    "match": "\\$ARGS"
+                }
+            ]
+        },
         "lua-outside": {
             "patterns": [
                 {
@@ -138,23 +151,252 @@
                     },
                     "patterns": [
                         {
+                            "include": "#lua-nested"
+                        },
+                        {
+                            "include": "#ldx-in-lua"
+                        },
+                        {
                             "include": "source.lua"
                         }
                     ]
                 }
             ]
         },
-		"inject": {
-			"patterns": [
-				{
-					"name": "meta.function-call.inject.ldx",
-					"match": "INJECT\\s*\\(([^)]+)\\)",
-					"captures": {
-						"0": { "name": "keyword.other.inject.ldx" },
-						"1": { "name": "variable.parameter.inject.ldx" }
-					}
-				}
-			]
-		}
+        "lua-inline": {
+            "patterns": [
+                {
+                    "name": "source.lua",
+                    "begin": "{",
+                    "end": "}",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.section.embedded.begin.lua" }
+                    },
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.embedded.end.lua" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#lua-nested"
+                        },
+                        {
+                            "include": "#ldx-in-lua"
+                        },
+                        {
+                            "include": "source.lua"
+                        }
+                    ]
+                }
+            ]
+        },
+        "lua-nested": {
+            "patterns": [
+                {
+                    "begin": "{",
+                    "end": "}",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.section.block.begin.lua" }
+                    },
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.block.end.lua" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#lua-nested"
+                        },
+                        {
+                            "include": "#ldx-in-lua"
+                        },
+                        {
+                            "include": "source.lua"
+                        }
+                    ]
+                },
+                {
+                    "include": "source.lua"
+                }
+            ]
+        },
+        "ldx-in-lua": {
+            "patterns": [
+                {
+                    "name": "meta.ldx-in-lua",
+                    "begin": "\\[&",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.section.embedded.begin.ldx-in-lua" }
+                    },
+                    "end": "&\\]",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.embedded.end.ldx-in-lua" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#tags"
+                        },
+                        {
+                            "include": "#lua-inline"
+                        },
+                        {
+                            "include": "#inject"
+                        },
+                        {
+                            "include": "#if-block"
+                        },
+                        {
+                            "include": "#map-block"
+                        }
+                    ]
+                }
+            ]
+        },
+        "inject": {
+            "patterns": [
+                {
+                    "name": "meta.function-call.inject.ldx",
+                    "begin": "INJECT\\s*\\(",
+                    "beginCaptures": {
+                        "0": { "name": "keyword.other.inject.ldx" }
+                    },
+                    "end": "\\)",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.arguments.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "name": "variable.parameter.inject.ldx",
+                            "match": "[^)]+"
+                        }
+                    ]
+                }
+            ]
+        },
+        "if-block": {
+            "patterns": [
+                {
+                    "name": "meta.control.if.ldx",
+                    "begin": "IF\\s*",
+                    "beginCaptures": {
+                        "0": { "name": "keyword.control.if.ldx" }
+                    },
+                    "end": "\\)",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.arguments.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "match": "\\(",
+                            "name": "punctuation.section.arguments.begin.ldx"
+                        },
+                        {
+                            "name": "source.lua",
+                            "match": "[^)]+"
+                        }
+                    ]
+                },
+                {
+                    "name": "meta.control.if.body.ldx",
+                    "begin": "\\s*\\[",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.section.block.begin.ldx" }
+                    },
+                    "end": "\\]",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.block.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#tags"
+                        },
+                        {
+                            "include": "#lua-inline"
+                        },
+                        {
+                            "include": "#inject"
+                        },
+                        {
+                            "include": "#if-block"
+                        },
+                        {
+                            "include": "#map-block"
+                        }
+                    ]
+                }
+            ]
+        },
+        "map-block": {
+            "patterns": [
+                {
+                    "name": "meta.control.map.ldx",
+                    "begin": "MAP\\s*",
+                    "beginCaptures": {
+                        "0": { "name": "keyword.control.map.ldx" }
+                    },
+                    "end": "\\)",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.arguments.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "match": "\\(",
+                            "name": "punctuation.section.arguments.begin.ldx"
+                        },
+                        {
+                            "name": "source.lua",
+                            "match": "[^)]+"
+                        }
+                    ]
+                },
+                {
+                    "name": "meta.control.map.body.ldx",
+                    "begin": "\\s*\\[",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.section.block.begin.ldx" }
+                    },
+                    "end": "\\]",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.block.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#tags"
+                        },
+                        {
+                            "include": "#lua-inline"
+                        },
+                        {
+                            "include": "#inject"
+                        },
+                        {
+                            "include": "#if-block"
+                        },
+                        {
+                            "include": "#map-block"
+                        },
+                        {
+                            "include": "#index-reference"
+                        },
+                        {
+                            "include": "#item-reference"
+                        }
+                    ]
+                }
+            ]
+        },
+        "index-reference": {
+            "patterns": [
+                {
+                    "name": "variable.other.index.ldx",
+                    "match": "\\$INDEX"
+                }
+            ]
+        },
+        "item-reference": {
+            "patterns": [
+                {
+                    "name": "variable.other.item.ldx",
+                    "match": "\\$ITEM"
+                }
+            ]
+        }
     }
 }
