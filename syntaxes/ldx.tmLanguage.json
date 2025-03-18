@@ -11,18 +11,73 @@
         }
     ],
     "repository": {
+        "reactive-variable": {
+            "patterns": [
+                {
+                    "name": "entity.name.class",
+                    "match": "@[a-zA-Z_][a-zA-Z0-9_.]*"
+                }
+            ]
+        },
+        "reactive-block": {
+            "begin": "@[a-zA-Z_][a-zA-Z0-9_.]*\\s*=\\s*\\[\\{",
+            "beginCaptures": {
+                "0": { "name": "entity.name.class" }
+            },
+            "end": "\\}\\]",
+            "endCaptures": {
+                "0": { "name": "entity.name.class" }
+            },
+            "patterns": [
+                { "include": "source.lua" }
+            ]
+        },
+        "use-effect": {
+            "patterns": [
+                {
+                    "name": "meta.function-call.useeffect.ldx",
+                    "begin": "\\bUSE_EFFECT\\s*",
+                    "beginCaptures": {
+                        "0": { "name": "keyword.control.useeffect.ldx" }
+                    },
+                    "end": "\\)",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.section.arguments.end.ldx" }
+                    },
+                    "patterns": [
+                        {
+                            "name": "source.lua",
+                            "begin": "function\\s*\\(",
+                            "beginCaptures": {
+                                "0": { "name": "storage.type.function.lua" }
+                            },
+                            "end": "end,",
+                            "endCaptures": {
+                                "0": { "name": "keyword.control.end.lua" }
+                            },
+                            "patterns": [
+                                { "include": "source.lua" }
+                            ]
+                        },
+                        {
+                            "include": "#lua-inline"
+                        }
+                    ]
+                }
+            ]
+        },
         "components": {
             "patterns": [
                 {
                     "name": "meta.component.ldx",
-                    "begin": "Component\\s+([A-Za-z][A-Za-z0-9]*)\\s*=\\s*\\{",
+                    "begin": "Component\\s+([A-Za-z][A-Za-z0-9]*)\\s*=\\s*{\\s*",
                     "beginCaptures": {
                         "0": { "name": "keyword.other.component.ldx" },
                         "1": { "name": "entity.name.type.component.ldx" }
                     },
                     "end": "\\}",
                     "endCaptures": {
-                        "0": { "name": "punctuation.section.block.end.ldx" }
+                        "0": { "name": "keyword.other.component.ldx" }
                     },
                     "patterns": [
                         {
@@ -39,6 +94,9 @@
                         },
                         {
                             "include": "#map-block"
+                        },
+                        {
+                            "include": "#use-effect"
                         }
                     ]
                 }
@@ -60,6 +118,12 @@
                     "patterns": [
                         {
                             "include": "#attributes"
+                        },
+                        {
+                            "include": "#reactive-block"
+                        },
+                        {
+                            "include": "#reactive-variable"
                         }
                     ]
                 },
@@ -107,6 +171,9 @@
                                 },
                                 {
                                     "include": "#parent-reference"
+                                },
+                                {
+                                    "include": "#reactive-variable"
                                 }
                             ]
                         }

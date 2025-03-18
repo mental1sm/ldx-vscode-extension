@@ -161,9 +161,9 @@ function activate(context) {
                         {
                             label: 'MAP',
                             kind: vscode.CompletionItemKind.Keyword,
-                            detail: 'Directive: Requires table in arg\nshortcuts: $INDEX $ITEM',
+                            detail: 'Directive: Requires table in arg',
                             insertText: new vscode.SnippetString('MAP(${1:arg}) [${2:}]'),
-                            documentation: new vscode.MarkdownString('Usage: `MAP((table) [\nexpression\n]`')
+                            documentation: new vscode.MarkdownString('Usage: `MAP((table) [\nexpression\n]`\nShortcuts: $INDEX $ITEM')
                         },
                         {
                             label: 'IF',
@@ -178,6 +178,13 @@ function activate(context) {
                             detail: 'Directive: Injects content or logic',
                             insertText: new vscode.SnippetString('INJECT(${1:arg})'),
                             documentation: new vscode.MarkdownString('Usage: `INJECT={content}` - Injects content or logic into the component.')
+                        },
+                        {
+                            label: 'USE_EFFECT',
+                            kind: vscode.CompletionItemKind.Enum,
+                            detail: 'Directive: gracefully integrate useEffect hook',
+                            insertText: new vscode.SnippetString('USE_EFFECT(function()\n\t${1}\n\treturn function()\n\t\t${2}\n\tend\nend, {${3}})'),
+                            documentation: new vscode.MarkdownString('Usage: `USE_EFFECT({function}, {deps}) - Auto manage of useEffect() hook`')
                         }
                     ];
                 }
